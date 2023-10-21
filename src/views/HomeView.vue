@@ -1,4 +1,13 @@
 <script setup>
+import { ref } from 'vue';
+
+const date = ref();
+
+const time = ref({
+  hours: new Date().getHours(),
+  minutes: new Date().getMinutes()
+});
+
   const info = [
     {
       img: "list-icon",
@@ -15,11 +24,13 @@
       title: "Easy to use",
       subtitle:"Friendly and functional user interface"
     }
-  ]
+  ];
 
   const getImageUrl = (name) => {
         return (`/images/${name}.png`)
-    }
+    };
+  
+  
 </script>
 
 <template>
@@ -40,8 +51,8 @@
           </div>
         </div>
       </div>
-      <div class="row w-100 my-5">
-        <div class="col-12 col-md-6 rounded-4 bg-danger p-5 text-white text-start d-flex align-items-center">
+      <div class="row w-100 d-block d-md-flex justify-content-between my-5">
+        <div class="col-12 col-md-4 rounded-4 bg-danger p-5 text-white text-start d-flex align-items-center">
           <div>
             <p class="big-text">
               READY TO START YOUR DAY?
@@ -51,22 +62,33 @@
             </p>
           </div>
         </div>
-        <div class="col-12 col-md-6 p-1 p-md-0 px-md-5 mt-4 mt-md-0">
-          <form>
-            <div class="mb-3">
-              <label for="activity-title" class="form-label">Title</label>
-              <input type="text" class="form-control" id="activity-title" aria-describedby="activityHelp">
-              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        <div class="col-12 col-md-7 p-1 border rounded-4 mt-4 mt-md-0">
+          <form class="d-block d-md-flex p-3">
+            <div class="col-12 col-md-8 ps-0 ps-md-0">
+              <div class="mb-3">
+                <label for="activity-title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="activity-title" aria-describedby="activityHelp">
+                <div id="activityHelp" class="form-text">Example: Go to Walmart.</div>
+              </div>
+              <div class="mb-3">
+                <label for="activity-details" class="form-label">Details</label>
+                <textarea class="form-control" id="activity-details"></textarea>
+              </div>
             </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1">
+            
+            <div class="col-12 col-md-4 ps-md-4">      
+              <div class="mb-3">
+                <label for="activity-date" class="form-label">Date</label>
+                <VueDatePicker v-model="date"></VueDatePicker>
+              </div>
+              <div class="mb-3">
+                <label for="activity-timie" class="form-label">Time</label>
+                <VueDatePicker v-model="time" time-picker/>
+              </div>
+              <div> 
+                <button type="submit" class="btn btn-dark px-5 py-2 w-100">Save Activity</button>
+              </div>
             </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
-            <button type="submit" class="btn btn-primary float-end">Submit</button>
           </form>
         </div>
       </div>
