@@ -1,11 +1,13 @@
 <script>
-import { defineComponent, ref, reactive, onMounted } from 'vue';
+import { defineComponent, reactive, onMounted } from 'vue';
 import { Icon } from '@iconify/vue';
 import TableLite from "vue3-table-lite";
+import moment from "moment";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getDatabase, ref, set, push } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -142,8 +144,24 @@ export default defineComponent({
     };
 
     const saveActivity = (el) => {
-      console.log("------------OkY", el)
-
+      if (!el.title || !el.description || !el.date || !el.time) {
+        alert("Please complete all fields")
+        return
+      }
+      
+      const db = getDatabase();
+      const activityRef = ref(db, 'activities/ ' + el.title)
+      const newActivity = push(activityRef)
+      set(newActivity, {
+        title: el.title,
+        description: el.description,
+        date: moment(el.date).format("L"),
+        time: el.time
+      })
+      eventState.event.title = ""
+      eventState.event.description = ""
+      eventState.event.date = ""
+      eventState.event.time = ""
     }
     // First get data
     getActivities();
@@ -209,7 +227,7 @@ export default defineComponent({
             <div class="col-12 col-md-4 ps-md-4">      
               <div class="mb-3">
                 <label for="activity-date" class="form-label">Date</label>
-                <VueDatePicker v-model="event.date"></VueDatePicker>
+                <VueDatePicker v-model="event.date" :enable-time-picker="false"></VueDatePicker>
               </div>
               <div class="mb-3">
                 <label for="activity-timie" class="form-label">Time</label>
